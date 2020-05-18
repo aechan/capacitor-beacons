@@ -1,0 +1,50 @@
+{
+  "name": "capacitor-beacons",
+  "version": "0.0.1",
+  "description": "Unified beacon plugin for capacitor. Supports iBeacons for iOS and Eddystone becaons for Android.",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Alec Chan",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@capacitor/core": "latest"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.0",
+    "typescript": "^3.2.4",
+    "@capacitor/ios": "latest",
+    "@capacitor/android": "latest"
+  },
+  "files": [
+    "dist/",
+    "ios/",
+    "android/",
+    "CapacitorBeacons.podspec"
+  ],
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aechan/capacitor-beacons"
+  },
+  "bugs": {
+    "url": "https://github.com/aechan/capacitor-beacons/issues"
+  }
+}
