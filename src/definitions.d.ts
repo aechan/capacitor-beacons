@@ -18,24 +18,7 @@ export enum ProximityEstimate {
  * so make sure to check for null on the optional fields.
  */
 export interface BeaconData {
-  /**
-   * The Received Signal Strength Indicator of this beacon at the time when it was pinged.
-   */
-  rssi: number;
-  /**
-   * Coarse proximity estimate for beacon: unknown, immediate, near, far
-   * 
-   * Copied from iOS CLProximity
-   */
-  estimatedProximity?: ProximityEstimate;
-  /**
-   * Accuracy (in meters) of the proximity estimate.
-   */
-  proximityAccuracy?: number;
-  /**
-   * The time that the beacon ping was observed by the system.
-   */
-  observedAt?: Date;
+  
   /**
    * The beacon's UUID (iBeacon specific)
    */
@@ -49,10 +32,67 @@ export interface BeaconData {
    */
   minor?: number;
   /**
-   * 
+   * The beacon's UID (Eddystone specific)
    */
+  uid?: string;
+  /**
+   * The beacon's TLM packet
+   */
+  tlm?: string;
 }
 
+export enum BeaconProtocol {
+  IBEACON = 0,
+  EDDYSTONE = 1
+}
+
+interface iBeaconIdData {
+  protocol: BeaconProtocol.IBEACON;
+  uuid: string;
+  major?: number;
+  minor?: number;
+}
+
+interface EddystoneIdData {
+  protocol: BeaconProtocol.EDDYSTONE;
+  uid?: string;
+  eid?: string;
+}
+
+interface EddystonePacket {
+  protocol: BeaconProtocol.EDDYSTONE;
+
+}
+
+interface iBeaconPacket {
+  protocol: BeaconProtocol.IBEACON;
+  /**
+   * The Received Signal Strength Indicator of this beacon at the time when it was pinged.
+   */
+  rssi: number;
+  /**
+   * Coarse proximity estimate for beacon: unknown, immediate, near, far
+   * 
+   * Copied from iOS CLProximity
+   */
+  estimatedProximity: ProximityEstimate;
+  /**
+   * Accuracy (in meters) of the proximity estimate.
+   */
+  proximityAccuracy: number;
+  /**
+   * The time that the beacon ping was observed by the system.
+   */
+  observedAt: Date;
+}
+
+export type BeaconIdData = iBeaconIdData | EddystoneIdData;
+export type BeaconPacket = iBeaconPacket | EddystonePacket;
+
 export interface CapacitorBeaconsPlugin {
-  
+  startMonitoringForBeacon(beaconIdData: BeaconIdData): Promise<string>;
+  stopMonitoringForBeacon(internalId: string): void;
+  onRegionEntered(callback: (internalId: string) => void, error: (err: any) => void): void;
+  onRegionExited(callback: (internalId: string) => void, error: (err: any) => void): void;
+  getRegisteredBeacons(): string[];
 }
